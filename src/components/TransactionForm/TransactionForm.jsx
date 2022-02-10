@@ -1,110 +1,151 @@
+import { nanoid } from "nanoid";
 import { Component } from "react";
+import {postTransaction} from "../../api";
 import CategoryList from "../CategoryList/CategoryList";
 
 class TransactionForm extends Component {
-    state = {
-        date: "2022-02-03",
-        time: "",
-        category: "eat",
-        sum: "",
-        currency: "UAH",
-        comment: "",
-        categoriesList: [],
-    };
-    handleChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-    };
-    addCategory = (newCategory) => {
-        this.setState((prevState) => ({
-            categoriesList: [...prevState.categoriesList, newCategory],
-        }));
-    };
+  state = {
+    date: "2022-02-22",
+    time: "",
+    category: "eat",
+    currency: "UAH",
+    comment: "",
+    total: "",
+    categoriesList: [
+      { id: 1, title: "Eat" },
+      { id: 2, title: "Drink" },
+    ],
+    transType: "costs",
+  };
 
-    handleSubmitTrans = (e) => {
-        e.preventDefault();
-        console.log(this.state);
-    };
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
-    render() {
-        const { date, time, category, sum, currency, comment, categoriesList } =
-            this.state;
-        return (
-            <>
-                <select name="transactionType" id="">
-                    <option value="Incomes">Доходы</option>
-                    <option value="Expends">Расходы</option>
-                </select>
-                <form onSubmit={this.handleSubmitTrans}>
-                    <label>
-                        День
-                        <input
-                            type="date"
-                            name="date"
-                            value={date}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+  addCategory = (newCategory) => {
+    this.setState((prevState) => ({
+      categoriesList: [...prevState.categoriesList, newCategory],
+    }));
+  };
+  handleSubmitTrans = (e) => {
+    e.preventDefault();
+    const { categoriesList, ...transaction } = this.state;
+    transaction.id = nanoid();
+    postTransaction({ transType:transaction.transType, transaction }).then((data) =>
+      this.props.addTransaction(data)
+    );
+    this.reset();
+  };
 
-                    <label>
-                        Время
-                        <input
-                            type="time"
-                            name="time"
-                            value={time}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+  reset = () => {
+    const resetedState = Object.keys(this.state).reduce((acc, el) => {
+      if (el === "categoriesList") return acc;
+      if (el === "category") {
+        acc[el] = "Eat";
+        return acc;
+      }
+      if (el === "date") {
+        acc[el] = "2022-02-22";
+        return acc;
+      }
+      acc[el] = "";
+      return acc;
+    }, {});
+    this.setState(resetedState);
+  };
 
-                    <label>
-                        Категория
-                        <input
-                            type="button"
-                            name="category"
-                            value={category}
-                            onClick={null}
-                        />
-                    </label>
+  setCategory = (newCategory) => {
+    this.setState({ category: newCategory });
+    this.props.togleCategoryList();
+  };
 
-                    <label>
-                        Сумма
-                        <input
-                            type="text"
-                            placeholder="Enter sum"
-                            name="sum"
-                            value={sum}
-                            onChange={this.handleChange}
-                        />
-                    </label>
-
-                    <label>
-                        Валюта
-                        <input
-                            type="button"
-                            name="currency"
-                            value={currency}
-                            onClick={null}
-                        />
-                    </label>
-
-                    <label>
-                        <input
-                            type="text"
-                            placeholder="comment"
-                            name="comment"
-                            value={comment}
-                            onChange={this.handleChange}
-                        />
-                    </label>
-                    <button type="submit">Submit</button>
-                </form>
-                <CategoryList
-                    categoriesList={categoriesList}
-                    addCategory={this.addCategory}
+  render() {
+    const { data, time, category, total, currency, comment, categoriesList } =
+      this.state;
+    const { isOpenCategories, togleCategoryList } = this.props;
+    return (
+      <>
+        {!isOpenCategories ? (
+          <>
+            <select name="transType" onChange={this.handleChange} value={this.state.transType}>
+              <option value="incomes">Incomes</option>
+              <option value="costs">Costs</option>
+            </select>
+            <form onSubmit={this.handleSubmitTrans}>
+              <label>
+                Day
+                <input
+                  name="date"
+                  type="date"
+                  value={data}
+                  onChange={this.handleChange}
                 />
-            </>
-        );
-    }
-}
+              </label>
 
+              <label>
+                Time
+                <input
+                  name="time"
+                  type="time"
+                  value={time}
+                  onChange={this.handleChange}
+                />
+              </label>
+
+              <label>
+                Category
+                <input
+                  name="category"
+                  type="button"
+                  value={category}
+                  onClick={togleCategoryList}
+                />
+              </label>
+
+              <label>
+                Total
+                <input
+                  name="total"
+                  type="text"
+                  placeholder="Enter sum"
+                  value={total}
+                  onChange={this.handleChange}
+                />
+              </label>
+
+              <label>
+                Currency
+                <input
+                  name="currency"
+                  type="button"
+                  value={currency}
+                  onClick={null}
+                />
+              </label>
+
+              <label>
+                <input
+                  name="comment"
+                  type="text"
+                  placeholder="Comment"
+                  value={comment}
+                  onChange={this.handleChange}
+                />
+              </label>
+              <button type="submit">Submit</button>
+            </form>
+          </>
+        ) : (
+          <CategoryList
+            categoriesList={categoriesList}
+            addCategory={this.addCategory}
+            togleCategoryList={togleCategoryList}
+            setCategory={this.setCategory}
+          />
+        )}
+      </>
+    );
+  }
+}
 export default TransactionForm;

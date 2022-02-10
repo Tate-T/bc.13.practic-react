@@ -1,28 +1,33 @@
+import { Component } from "react";
+import MainBtns from "../MainBtns/MainBtns";
 import TransactionForm from "../TransactionForm/TransactionForm";
 
+class MainPage extends Component {
+  state = {
+    isOpenCategories: false,
+  };
 
-const MainPage = ({ changePage }) => {
+  togleCategoryList = () => {
+    this.setState((prevState) => ({
+      isOpenCategories: !prevState.isOpenCategories,
+    }));
+  };
+
+  render() {
+    const { changePage, addTransaction } = this.props;
+    const { isOpenCategories } = this.state;
+
     return (
-        <>
-            <TransactionForm />
-            <button
-                onClick={() => {
-                    changePage("incomes")
-                }}
-                type="button"
-            >
-                Доходы
-            </button>
-            <button
-                onClick={() => {
-                    changePage("costs")
-                }}
-                type="button"
-            >
-                Расходы
-            </button>
-        </>
-    )
+      <>
+        <TransactionForm
+          isOpenCategories={isOpenCategories}
+          togleCategoryList={this.togleCategoryList}
+          addTransaction={addTransaction}
+        />
+        {!isOpenCategories && <MainBtns changePage={changePage} />}
+      </>
+    );
+  }
 }
 
 export default MainPage;
