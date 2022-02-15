@@ -1,22 +1,14 @@
-function MainBtns({ changePage }) {
+import { Link } from "react-router-dom";
+
+function MainBtns() {
   return (
     <>
-      <button
-        onClick={() => {
-          changePage("incomes");
-        }}
-        type="button"
-      >
+      <Link className="link" to={"/transactions/incomes"}>
         Incomes
-      </button>
-      <button
-        onClick={() => {
-          changePage("costs");
-        }}
-        type="button"
-      >
+      </Link>
+      <Link className="link" to={"/transactions/costs"}>
         Costs
-      </button>
+      </Link>
     </>
   );
 }

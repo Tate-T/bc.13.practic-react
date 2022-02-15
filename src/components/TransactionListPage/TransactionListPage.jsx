@@ -1,18 +1,25 @@
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import TransactionForm from "../TransactionForm/TransactionForm";
 import TransactionList from "../TransactionList/TransactionList";
 
-const TransactionListPage = ({ changePage, transType, transactions, delTransaction }) => {
+const TransactionListPage = () => {
+  const { transType } = useParams();
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [editingTransaction, setEditTransaction] = useState(null);
+
+  const switchEditForm = (transaction) => {
+    setIsEdit((prev) => !prev);
+    setEditTransaction(transaction);
+  };
+
   return (
     <>
       <h1>TransactionListPage</h1>
-      <TransactionList transactions={transactions} delTransaction={delTransaction}/>
-      <button
-        onClick={() => {
-          changePage("main");
-        }}
-        type="button"
-      >
-        Back
-      </button>
+      {isEdit && <TransactionForm editingTransaction={editingTransaction} />}
+      <TransactionList transType={transType} switchEditForm={switchEditForm} />
+      <Link className="link" to={"/"}>Back</Link>
     </>
   );
 };

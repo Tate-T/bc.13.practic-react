@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { nanoid } from "nanoid";
+import { Link } from "react-router-dom";
 
 class CategoryList extends Component {
   state = { inputCategory: "" };
@@ -27,9 +28,9 @@ class CategoryList extends Component {
     const { categoriesList, togleCategoryList, setCategory } = this.props;
     return (
       <>
-        <button type="button" onClick={togleCategoryList}>
+        <Link className="link" to={"/"}>
           Back
-        </button>
+        </Link>
         <ul>
           {categoriesList.map((el) => (
             <li key={el.id}>

@@ -11,6 +11,15 @@ export const postTransaction = ({ transType, transaction }) => {
     });
 };
 
+export const editTransactionApi = ({ transType, transaction }) => {
+  return axios
+    .patch(baseUrl + transType +"/"+transaction.id, transaction)
+    .then((res) => res.data)
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export const getTransactions = (transType) => {
   return axios
     .get(baseUrl + transType)

@@ -1,33 +1,25 @@
-import { Component } from "react";
+import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 import MainBtns from "../MainBtns/MainBtns";
 import TransactionForm from "../TransactionForm/TransactionForm";
 
-class MainPage extends Component {
-  state = {
-    isOpenCategories: false,
-  };
+const MainPage = () => {
+  const { isExact } = useRouteMatch();
+  // state = {
+  //   isOpenCategories: false,
+  // };
 
-  togleCategoryList = () => {
-    this.setState((prevState) => ({
-      isOpenCategories: !prevState.isOpenCategories,
-    }));
-  };
+  // togleCategoryList = () => {
+  //   this.setState((prevState) => ({
+  //     isOpenCategories: !prevState.isOpenCategories,
+  //   }));
+  // };
 
-  render() {
-    const { changePage, addTransaction } = this.props;
-    const { isOpenCategories } = this.state;
-
-    return (
-      <>
-        <TransactionForm
-          isOpenCategories={isOpenCategories}
-          togleCategoryList={this.togleCategoryList}
-          addTransaction={addTransaction}
-        />
-        {!isOpenCategories && <MainBtns changePage={changePage} />}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <TransactionForm />
+      {isExact && <MainBtns />}
+    </>
+  );
+};
 
 export default MainPage;
