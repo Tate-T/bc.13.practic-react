@@ -1,4 +1,4 @@
-import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+import { useRouteMatch } from "react-router-dom";
 import MainBtns from "../MainBtns/MainBtns";
 import TransactionForm from "../TransactionForm/TransactionForm";
 
