@@ -1,4 +1,4 @@
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 import MainBtns from "../MainBtns/MainBtns";
 import TransactionForm from "../TransactionForm/TransactionForm";
 
@@ -17,8 +17,7 @@ const MainPage = () => {
   return (
     <>
       <TransactionForm />
-      {isExact &&
-        <MainBtns />}
+      {isExact && <MainBtns />}
     </>
   );
 };

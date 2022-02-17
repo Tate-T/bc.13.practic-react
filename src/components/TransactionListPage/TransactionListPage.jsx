@@ -6,7 +6,6 @@ import TransactionList from "../TransactionList/TransactionList";
 const TransactionListPage = () => {
   const { transType } = useParams();
   const [isEdit, setIsEdit] = useState(false);
-  console.log(transType);
 
   const [editingTransaction, setEditTransaction] = useState(null);
 
@@ -18,18 +17,11 @@ const TransactionListPage = () => {
   return (
     <>
       <h1>TransactionListPage</h1>
-      {isEdit && (
-        <TransactionForm
-          editingTransaction={editingTransaction}
-          setIsEdit={setIsEdit}
-        />
-      )}
+      {isEdit && <TransactionForm editingTransaction={editingTransaction} setIsEdit={setIsEdit}/>}
       <TransactionList transType={transType} switchEditForm={switchEditForm} />
-      <Link className="link" to={"/"}>
-        Back
-      </Link>
+      <Link className="link" to={"/"}>Back</Link>
     </>
-  )
+  );
 };
 
 export default TransactionListPage;

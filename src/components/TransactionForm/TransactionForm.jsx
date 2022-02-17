@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { editTransactionApi, postTransaction } from "../../api";
 import CategoryList from "../CategoryList/CategoryList";
-import { useTransactionsContext } from "../../context/TransactionsProvider/TransactionsProvider";
+import { useTransactionsContext } from "../../context/TransactionsProvider";
 import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  addCosts,
+  addIncomes,
+} from "../../redux/transactions/transactionsActions";
 
 const initialForm = {
   date: "2022-02-22",
@@ -15,71 +20,67 @@ const initialForm = {
   total: "",
 };
 
-const initialCategoriesList = [
-  { id: 1, title: "Eat" },
-  { id: 2, title: "Drink" },
-];
+const TransactionForm = ({
+  togleCategoryList,
+  editingTransaction,
+  setIsEdit,
+  addIncomesProps,
+  addCostsProps,
+}) => {
+  const history = useHistory();
 
-const TransactionForm = ({ editingTransaction, setIsEdit }) => {
-  const history = useHistory()
-
-  const match = useRouteMatch()
-  // console.log(editingTransaction);
-  const { addTransaction, editTransaction } = useTransactionsContext()
+  const match = useRouteMatch();
+  const { editTransaction } = useTransactionsContext();
   const [form, setForm] = useState(() =>
     editingTransaction ? editingTransaction : initialForm
-  )
-  const [categoriesList, setCategoriesList] = useState(initialCategoriesList)
-  const [transType, setTransType] = useState("costs")
+  );
+  const [transType, setTransType] = useState("costs");
 
   const handleChangeForm = (e) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const openCategoryList = () => {
     history.push(
       match.url === "/" ? "/categories-list" : match.url + "/categories-list"
-    )
-  }
+    );
+  };
 
   const handleChangeTransType = (e) => {
-    const { value } = e.target
-    setTransType(value)
-  }
-
-  const addCategory = (newCategory) => {
-    setCategoriesList((prevCategoryList) => [...prevCategoryList, newCategory])
-  }
+    const { value } = e.target;
+    setTransType(value);
+  };
 
   const handleSubmitTrans = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (editingTransaction) {
-      console.log(editingTransaction)
+      console.log(form);
       editTransactionApi({ transType, transaction: form }).then((res) => {
-        editTransaction(res)
-        setIsEdit(false)
-      }
+        editTransaction(res);
 
-      )
+        setIsEdit(false);
+      });
     } else {
-      postTransaction({ transType, transaction: { ...form, transType } }).then(
-        (data) => addTransaction(data)
-      )
+      postTransaction({ transType, transaction: { ...form, transType } })
+        .then((data) => {
+          transType === "incomes" && addIncomesProps(data);
+          transType === "costs" && addCostsProps(data);
+        })
+        .catch((err) => console.log(err));
     }
     setForm(initialForm);
-  }
+  };
 
   const setCategory = (newCategory) => {
-    setForm((prevForm) => ({ ...prevForm, category: newCategory }))
-    history.goBack()
-  }
+    setForm((prevForm) => ({ ...prevForm, category: newCategory }));
+    history.goBack();
+  };
 
-  const { date, time, category, total, currency, comment } = form
+  const { date, time, category, total, currency, comment } = form;
 
   return (
     <Switch>
-      {console.log(match.path + "/categories-list")}
       <Route path={match.path} exact>
         <select
           name="transType"
@@ -155,6 +156,7 @@ const TransactionForm = ({ editingTransaction, setIsEdit }) => {
           </button>
         </form>
       </Route>
+
       <Route
         path={
           match.path === "/"
@@ -163,12 +165,17 @@ const TransactionForm = ({ editingTransaction, setIsEdit }) => {
         }
       >
         <CategoryList
-          categoriesList={categoriesList}
-          addCategory={addCategory}
+          togleCategoryList={togleCategoryList}
           setCategory={setCategory}
+          transType={transType}
         />
       </Route>
     </Switch>
-  )
-}
-export default TransactionForm;
+  );
+};
+const mapDispatchToProps = {
+  addIncomesProps: addIncomes,
+  addCostsProps: addCosts,
+};
+
+export default connect(null, mapDispatchToProps)(TransactionForm);
