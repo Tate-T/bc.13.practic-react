@@ -5,11 +5,11 @@ import { useTransactionsContext } from "../../context/TransactionsProvider";
 import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   addCosts,
   addIncomes,
-} from "../../redux/transactions/transactionsActions";
+} from "../../redux/transactions/transactionsOperations";
 
 const initialForm = {
   date: "2022-02-22",
@@ -23,10 +23,9 @@ const initialForm = {
 const TransactionForm = ({
   togleCategoryList,
   editingTransaction,
-  setIsEdit,
-  addIncomesProps,
-  addCostsProps,
+  setIsEdit, 
 }) => {
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const match = useRouteMatch();
@@ -61,13 +60,8 @@ const TransactionForm = ({
 
         setIsEdit(false);
       });
-    } else {
-      postTransaction({ transType, transaction: { ...form, transType } })
-        .then((data) => {
-          transType === "incomes" && addIncomesProps(data);
-          transType === "costs" && addCostsProps(data);
-        })
-        .catch((err) => console.log(err));
+    } else {transType === "costs" && dispatch(addCosts(form));
+            transType === "incomes" && dispatch(addIncomes(form));      
     }
     setForm(initialForm);
   };
@@ -165,17 +159,17 @@ const TransactionForm = ({
         }
       >
         <CategoryList
+          transType={transType}
           togleCategoryList={togleCategoryList}
           setCategory={setCategory}
-          transType={transType}
         />
       </Route>
     </Switch>
   );
 };
-const mapDispatchToProps = {
-  addIncomesProps: addIncomes,
-  addCostsProps: addCosts,
-};
+// const mapDispatchToProps = {
+//   addIncomesProps: addIncomes,
+//   addCostsProps: addCosts,
+// };
 
-export default connect(null, mapDispatchToProps)(TransactionForm);
+export default TransactionForm;

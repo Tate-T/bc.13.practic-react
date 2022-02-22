@@ -5,9 +5,7 @@ import { useCategoriesContext } from "../../context/CategoriesProvider";
 
 const CategoryList = ({ setCategory, transType }) => {
   const [inputCategory, setInputCategory] = useState("");
-
-  const { [transType + "Cat"]: categoriesList, addCategory } =
-    useCategoriesContext();
+  const { [transType+"Cat"]:categoriesList, incomesCat, costsCat, addCategory } = useCategoriesContext();
 
   const handleInputChange = (e) => {
     const { value } = e.target;
@@ -16,9 +14,13 @@ const CategoryList = ({ setCategory, transType }) => {
 
   const handleSubmitNewCategory = (e) => {
     e.preventDefault();
-    postCategory({ transType, category: { title: inputCategory } })
-      .then((data) => addCategory({ transType, newCategory: data }))
-      .catch(console.error);
+    postCategory({ transType, category: { title: inputCategory } }).then(
+      (data) =>
+        addCategory({ transType, newCategory: data }).catch((err) =>
+          console.log(err)
+        )
+    );
+    // addCategory({title: inputCategory });
     setInputCategory("");
   };
 

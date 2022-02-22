@@ -1,8 +1,20 @@
 import { useState } from "react";
-import { useTransactionsContext } from "../../context/TransactionsProvider";
+import { useDispatch } from "react-redux";
+import { removeTransactionApi } from "../../api";
+import {
+  removeCosts,
+  removeIncomes,
+} from "../../redux/transactions/transactionsActions";
 
 const TransactionListItem = ({ transaction, switchEditForm }) => {
-  const { delTransaction } = useTransactionsContext();
+  const dispatch = useDispatch();
+
+  const delTransaction = ({ id, transType }) => {
+    removeTransactionApi({ id, transType }).then(() => {
+      transType === "incomes" && dispatch(removeIncomes(id));
+      transType === "costs" && dispatch(removeCosts(id));
+    });
+  };
 
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 

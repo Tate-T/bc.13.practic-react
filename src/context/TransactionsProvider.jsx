@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { getTransactions, removeTransactionApi } from "../api";
+import { createContext, useContext, useState } from "react";
+import { removeTransactionApi } from "../api";
 
 const TransactionsContext = createContext();
 export const useTransactionsContext = () => useContext(TransactionsContext);
@@ -8,13 +8,13 @@ const TransactionsProvider = ({ children }) => {
   const [costs, setCosts] = useState([]);
   const [incomes, setIncomes] = useState([]);
 
-  const addTransaction = (newTrans) => {
-    const transType = newTrans.transType;
-    transType === "costs" && setCosts((prevCosts) => [...prevCosts, newTrans]);
+  // const addTransaction = (newTrans) => {
+  //   const transType = newTrans.transType;
+  //   transType === "costs" && setCosts((prevCosts) => [...prevCosts, newTrans]);
 
-    transType === "incomes" &&
-      setIncomes((prevIncomes) => [...prevIncomes, newTrans]);
-  };
+  //   transType === "incomes" &&
+  //     setIncomes((prevIncomes) => [...prevIncomes, newTrans]);
+  // };
 
   const delTransaction = ({ id, transType }) => {
     removeTransactionApi({ id, transType }).then((res) => {
@@ -44,7 +44,7 @@ const TransactionsProvider = ({ children }) => {
         delTransaction,
         costs,
         incomes,
-        addTransaction,
+        // addTransaction,
         editTransaction,
       }}
     >

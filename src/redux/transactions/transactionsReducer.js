@@ -1,29 +1,45 @@
 import { combineReducers } from "redux";
+import { createReducer } from "@reduxjs/toolkit";
+import {  
+  removeCosts,
+  removeIncomes,
+} from "./transactionsActions";
+import {
+  addIncomes,
+  addCosts,
+  getTransactions,
+} from "./transactionsOperations";
 
-const costsReducer = (state = [], { type, payload }) => {
-  switch (type) {
-    case "transactions/addCosts":
-      return [...state, payload];
-    case "transactions/getCosts":
-      return payload;
-    default:
-      return state;
-  }
-};
-
-const incomesRudecer = (state = [], { type, payload }) => {
-  switch (type) {
-    case "transactions/addIncomes":
-      return [...state, payload];
-    case "transactions/getIncomes":
-      return payload;
-    default:
-      return state;
-  }
-};
-
-const transactionsReducer = combineReducers({
-  costs: costsReducer,
-  incomes: incomesRudecer,
+const costsReducer = createReducer([], {
+  [addCosts.fulfilled]: (state, { payload }) => [...state, payload],
+  [getTransactions.fulfilled]: (_, { payload: { costs } }) => costs,
+  [removeCosts]: (state, { payload }) => {
+    return state.filter((el) => el.id !== payload);
+  },
 });
-export default transactionsReducer;
+
+const incomesReducer = createReducer([], {
+  [addIncomes.fulfilled]: (state, { payload }) => [...state, payload],
+  [getTransactions.fulfilled]: (_, { payload: { incomes } }) => incomes,
+  [removeIncomes]: (state, { payload }) => {
+    return state.filter((el) => el.id !== payload);
+  },
+});
+
+const isLoadingReducer = createReducer(false, {
+  [addCosts.pending]: () => true,
+  [addCosts.fulfilled]: () => false,
+  [addCosts.rejected]: () => false,
+  [addIncomes.pending]: () => true,
+  [addIncomes.fulfilled]: () => false,
+  [addIncomes.rejected]: () => false,
+  [getTransactions.pending]: () => true,
+  [getTransactions.fulfilled]: () => false,
+  [getTransactions.rejected]: () => false,
+});
+
+export const transactionsReducer = combineReducers({
+  costs: costsReducer,
+  incomes: incomesReducer,
+  isLoading: isLoadingReducer,
+});

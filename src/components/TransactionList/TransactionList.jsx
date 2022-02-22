@@ -1,12 +1,13 @@
-import { connect } from "react-redux";
-
+import { useSelector } from "react-redux";
 import TransactionListItem from "../TransactionListItem/TransactionListItem";
 
-const TransactionList = ({ transType, switchEditForm, transactionsProps }) => {
-  const transactions = transactionsProps[transType];
+const TransactionList = ({ transType, switchEditForm }) => {
+  const transactions = useSelector((state) => state.transactions);
+  // const transactions = transactionsProps[transType];
+
   return (
     <ul>
-      {transactions.map((transaction) => (
+      {transactions[transType].map((transaction) => (
         <TransactionListItem
           transaction={transaction}
           key={transaction.id}
@@ -16,10 +17,13 @@ const TransactionList = ({ transType, switchEditForm, transactionsProps }) => {
     </ul>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    transactionsProps: state.transactions,
-  };
-};
 
-export default connect(mapStateToProps)(TransactionList);
+// const mapStateToProps = (state) => {
+//   return {
+//     transactionsProps: state.transactions,
+//   };
+// };
+
+export default TransactionList;
+
+// const mapDispatchToProps = {}
