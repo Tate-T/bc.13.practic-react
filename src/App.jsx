@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import MainPage from "./components/MainPage/MainPage";
 import TransactionListPage from "./components/TransactionListPage/TransactionListPage";
@@ -22,6 +22,7 @@ const App = () => {
         <Route path="/">
           <MainPage />
         </Route>
+        <Redirect to="/" />
       </Switch>
     </div>
   );
