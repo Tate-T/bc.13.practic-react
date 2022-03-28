@@ -39,7 +39,7 @@ export const getTransactions = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const transactions = await getTransactionsApi();
-      console.log(transactions);
+      // console.log(transactions);
       return {
         costs: transactions?.costs
           ? transformGetTransactions(transactions.costs)
