@@ -4,15 +4,6 @@ import TransactionForm from "../TransactionForm/TransactionForm";
 
 const MainPage = () => {
   const { isExact } = useRouteMatch();
-  // state = {
-  //   isOpenCategories: false,
-  // };
-
-  // togleCategoryList = () => {
-  //   this.setState((prevState) => ({
-  //     isOpenCategories: !prevState.isOpenCategories,
-  //   }));
-  // };
 
   return (
     <>

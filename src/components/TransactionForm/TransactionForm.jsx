@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { editTransactionApi, postTransaction } from "../../api";
+import { editTransactionApi } from "../../api";
 import CategoryList from "../CategoryList/CategoryList";
 import { useTransactionsContext } from "../../context/TransactionsProvider";
 import { Route, Switch } from "react-router-dom";
@@ -9,7 +9,11 @@ import { useDispatch } from "react-redux";
 import {
   addCosts,
   addIncomes,
+  editTransaction,
 } from "../../redux/transactions/transactionsOperations";
+import { Col, Form, FormControl, InputGroup, Button } from "react-bootstrap";
+import SelectTranstype from "../SelectTranstype/SelectTranstype";
+import { FormStyled } from "./TransactionForm.styled";
 
 const initialForm = {
   date: "2022-02-22",
@@ -23,13 +27,12 @@ const initialForm = {
 const TransactionForm = ({
   togleCategoryList,
   editingTransaction,
-  setIsEdit, 
+  setIsEdit,
 }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const match = useRouteMatch();
-  const { editTransaction } = useTransactionsContext();
+
   const [form, setForm] = useState(() =>
     editingTransaction ? editingTransaction : initialForm
   );
@@ -54,14 +57,11 @@ const TransactionForm = ({
   const handleSubmitTrans = (e) => {
     e.preventDefault();
     if (editingTransaction) {
-      console.log(form);
-      editTransactionApi({ transType, transaction: form }).then((res) => {
-        editTransaction(res);
-
-        setIsEdit(false);
-      });
-    } else {transType === "costs" && dispatch(addCosts(form));
-            transType === "incomes" && dispatch(addIncomes(form));      
+      dispatch(editTransaction({ transType, transaction: form }));
+      setIsEdit(false);
+    } else {
+      transType === "costs" && dispatch(addCosts(form));
+      transType === "incomes" && dispatch(addIncomes(form));
     }
     setForm(initialForm);
   };
@@ -76,79 +76,74 @@ const TransactionForm = ({
   return (
     <Switch>
       <Route path={match.path} exact>
-        <select
-          name="transType"
-          onChange={handleChangeTransType}
-          value={transType}
-        >
-          <option value="incomes">Incomes</option>
-          <option value="costs">Costs</option>
-        </select>
-        <form onSubmit={handleSubmitTrans}>
-          <label>
-            Day
-            <input
+        <SelectTranstype
+          handleChangeTransType={handleChangeTransType}
+          transType={transType}
+        />
+
+        <FormStyled onSubmit={handleSubmitTrans}>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Day</InputGroup.Text>
+            <FormControl
               name="date"
               type="date"
               value={date}
               onChange={handleChangeForm}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            Time
-            <input
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Time</InputGroup.Text>
+            <FormControl
               name="time"
               type="time"
               value={time}
               onChange={handleChangeForm}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            Category
-            <input
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Category</InputGroup.Text>
+            <FormControl
               name="category"
               type="button"
               value={category}
               onClick={openCategoryList}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            Total
-            <input
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Total</InputGroup.Text>
+            <FormControl
               name="total"
               type="text"
               placeholder="Enter sum"
               value={total}
               onChange={handleChangeForm}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            Currency
-            <input
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Currency</InputGroup.Text>
+            <FormControl
               name="currency"
               type="button"
               value={currency}
               onClick={null}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            <input
+          <InputGroup className="mb-3">
+            <FormControl
               name="comment"
               type="text"
               placeholder="Comment"
               value={comment}
               onChange={handleChangeForm}
             />
-          </label>
-          <button className="submit" type="submit">
-            Submit
-          </button>
-        </form>
+          </InputGroup>
+          <Button variant="outline-dark" className="mx-auto d-block" as="input" type="submit" value="Submit" />
+        </FormStyled>
       </Route>
 
       <Route
