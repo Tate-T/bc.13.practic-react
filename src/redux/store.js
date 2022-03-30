@@ -2,6 +2,7 @@
 // import { composeWithDevTools } from "@redux-devtools/extension";
 import {transactionsReducer} from "./transactions/transactionsReducer";
 import {configureStore} from "@reduxjs/toolkit"
+import form from './form/formSlice'
 
 // const reducer = (state = [], action) => {
 //   return state;
@@ -14,6 +15,7 @@ import {configureStore} from "@reduxjs/toolkit"
 export const store= configureStore({
     reducer:{
         transactions:transactionsReducer,
+        form,
     }
 })
 
