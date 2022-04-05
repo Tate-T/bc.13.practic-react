@@ -5,7 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeInput, setInitialState } from "../../redux/form/formSlice";
 import { getFormValue } from "../../redux/form/formSelectors";
 
-const Form = ({ options, cbOnSubmit, initialFormValue, cbOnClick = null }) => {
+const Form = ({
+  options,
+  cbOnSubmit,
+  initialFormValue,
+  cbOnClick = null,
+  children,
+}) => {
   const dispatch = useDispatch();
 
   const form = useSelector(getFormValue);
@@ -14,7 +20,6 @@ const Form = ({ options, cbOnSubmit, initialFormValue, cbOnClick = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     cbOnSubmit(form);
-    
   };
 
   const handleChange = (e) => {
@@ -27,7 +32,7 @@ const Form = ({ options, cbOnSubmit, initialFormValue, cbOnClick = null }) => {
     dispatch(setInitialState(initialFormValue));
   }, []);
 
-  console.log('Form');
+  console.log("Form");
 
   return (
     <FormStyled onSubmit={handleSubmit}>
@@ -44,7 +49,6 @@ const Form = ({ options, cbOnSubmit, initialFormValue, cbOnClick = null }) => {
           />
         </InputGroup>
       ))}
-
       <Button
         variant="outline-dark"
         className="mx-auto d-block"
@@ -52,6 +56,7 @@ const Form = ({ options, cbOnSubmit, initialFormValue, cbOnClick = null }) => {
         type="submit"
         value="Submit"
       />
+      {children}
     </FormStyled>
   );
 };

@@ -2,7 +2,6 @@
   "name": "bc.13.practic-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Tate-T.github.io/bc.13.practic-react",
   "dependencies": {
     "@redux-devtools/extension": "^3.2.2",
     "@reduxjs/toolkit": "^1.7.2",
@@ -11,9 +10,9 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.25.0",
     "bootstrap": "^5.1.3",
-    "gh-pages": "^3.2.3",
     "json-server": "^0.17.0",
     "nanoid": "^3.2.0",
+    "netlify-cli": "^9.16.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.2.2",
     "react-dom": "^17.0.2",
@@ -29,7 +28,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "netlify deploy -p",
     "server": "json-server --watch db.json --port 3004 --delay 500"
   },
   "eslintConfig": {

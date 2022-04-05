@@ -2,9 +2,11 @@ import axios from "axios";
 
 // const baseUrl = "http://localhost:3004/";
 
+
+// зробити свій бекенд (зареєструвати) !!!!
 const baseUrl =
   "https://wallet-bc-13-default-rtdb.europe-west1.firebasedatabase.app"
-  const API_KEY = "AIzaSyCQgYKU4dc1QAs8zEUp_bKCyg-BpQ2eN14"
+const API_KEY = "AIzaSyCQgYKU4dc1QAs8zEUp_bKCyg-BpQ2eN14"
 
 export const postTransaction = ({ transType, transaction }) => {
   return axios
@@ -21,7 +23,7 @@ export const editTransactionApi = ({ transType, transaction }) => {
       baseUrl + "/transactions/" + transType + "/" + transaction.id + ".json",
       transaction
     )
-    .then((res) => ({...res.data,id:transaction.id}))
+    .then((res) => ({ ...res.data, id: transaction.id }))
     .catch((err) => {
       throw err;
     });
@@ -65,7 +67,7 @@ export const getCategories = (transType) => {
 
 
 export const registerUserApi = (userData) => {
-  axios.defaults.baseURL = "https://identitytoolkit.googleapis.com/v1" 
+  axios.defaults.baseURL = "https://identitytoolkit.googleapis.com/v1"
   axios.defaults.params = { key: API_KEY }
   return axios
     .post("/accounts:signUp", {
