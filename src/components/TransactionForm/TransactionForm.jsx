@@ -10,7 +10,7 @@ import {
   editTransaction,
 } from "../../redux/transactions/transactionsOperations"
 
-import SelectTranstype from "../SelectTransType/SelectTranstype"
+import SelectTranstype from "../SelectTranstype/SelectTranstype"
 import { transactionFormOptions } from "../../assets/options/transactionFormOptions"
 import Form from "../Form/Form"
 import { getTransactions } from "../../redux/transactions/transactionSelectors"
