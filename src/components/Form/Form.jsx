@@ -27,6 +27,8 @@ const Form = ({ options, cbOnSubmit, initialFormValue, cbOnClick = null }) => {
     dispatch(setInitialState(initialFormValue));
   }, []);
 
+  console.log('Form');
+
   return (
     <FormStyled onSubmit={handleSubmit}>
       {options.map(({ title, name, type, placeholder }) => (

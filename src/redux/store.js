@@ -1,22 +1,12 @@
-// import { combineReducers, createStore } from "redux";
-// import { composeWithDevTools } from "@redux-devtools/extension";
-import {transactionsReducer} from "./transactions/transactionsReducer";
-import {configureStore} from "@reduxjs/toolkit"
-import form from './form/formSlice'
+import { transactionsReducer } from "./transactions/transactionsReducer"
+import { configureStore } from "@reduxjs/toolkit"
+import form from "./form/formSlice"
+import auth from "./auth/authSlice"
 
-// const reducer = (state = [], action) => {
-//   return state;
-// };
-
-// const rootReducer = combineReducers({ transactions: transactionsReducer });
-
-// export const store = createStore(rootReducer, composeWithDevTools());
-
-export const store= configureStore({
-    reducer:{
-        transactions:transactionsReducer,
-        form,
-    }
+export const store = configureStore({
+  reducer: {
+    transactions: transactionsReducer,
+    form,
+    auth,
+  },
 })
-
- 

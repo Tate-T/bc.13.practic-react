@@ -1,1 +1,1 @@
-export const getFormValue=state=>state.form;
+export const getFormValue = (state) => state.form
